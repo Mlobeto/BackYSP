@@ -9,7 +9,7 @@ const searchVideosByKeyword = async (keyword) => {
         part: 'snippet',
         q: keyword,
         channelId: 'UCDgXHpJkAlDB5sRz6NrEofw',
-        maxResults: 20, // Cambia esto según tus necesidades
+        maxResults: 900, // Cambia esto según tus necesidades
         key: API_KEY,
       },
     });
