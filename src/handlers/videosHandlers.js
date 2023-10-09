@@ -8,7 +8,7 @@ const { filterVideosByTags, searchVideosByKeyword } = require('../controllers/se
 const getVideosHandler = async (req, res) => {
   try {
     const keyword = req.query.keyword;
-    const channelId = 'UCDgXHpJkAlDB5sRz6NrEofw'; // Reemplaza esto con tu channelId
+    const channelId = 'UCDgXHpJkAlDB5sRz6NrEofw'; 
 
     const videos = await searchVideosByKeyword(keyword, channelId);
 
@@ -26,19 +26,19 @@ const getVideoById = async (videoId, channelId) => {
   try {
     const response = await youtube.videos.list({
       part: 'snippet',
-      id: videoId, // Corregir aquí
+      id: videoId, 
       channelId: channelId,
     });
 
     const videoData = response.data.items[0];
 
-    // Mapea la respuesta a tu modelo de base de datos
+    
     const video = {
       id: videoData.id,
       title: videoData.snippet.title,
       url: `https://www.youtube.com/watch?v=${videoData.id}`,
       thumbnailUrl: videoData.snippet.thumbnails.default.url,
-      tags: videoData.snippet.tags || [], // Asegúrate de manejar las etiquetas correctamente
+      tags: videoData.snippet.tags || [], 
     };
 
     return video;
@@ -51,7 +51,7 @@ const getVideoById = async (videoId, channelId) => {
 const getVideosDetailHandler = async (req, res) => {
   try {
     const videoId = req.params.id;
-    const channelId = 'UCDgXHpJkAlDB5sRz6NrEofw'; // Reemplaza esto con tu channelId
+    const channelId = 'UCDgXHpJkAlDB5sRz6NrEofw'; 
 
     const video = await getVideoById(videoId, channelId);
 

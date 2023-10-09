@@ -8,7 +8,7 @@ const getPlaylistsHandler = async (req, res) => {
       params: {
         part: 'snippet,contentDetails',
         channelId: 'UCDgXHpJkAlDB5sRz6NrEofw',
-        maxResults: 10,
+        maxResults: 33,
         key: API_KEY,
       },
     });
@@ -43,11 +43,11 @@ const getPlaylistByIdHandler = async (req, res) => {
     });
 
     if (response.data.items.length === 0) {
-      // Si no se encuentra ninguna lista de reproducción con ese ID, devolver un mensaje de error
+     
       res.status(404).json({ error: 'No se encontró ninguna lista de reproducción con ese ID.' });
     } else {
-      // Si se encuentra la lista de reproducción, responder con sus datos
-      const playlistData = response.data.items[0]; // Obtener la primera lista de reproducción (debería ser solo una)
+      
+      const playlistData = response.data.items[0];
       res.status(200).json(playlistData);
     }
   } catch (error) {

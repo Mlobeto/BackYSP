@@ -4,7 +4,7 @@ const { getPlaylistsHandler, getPlaylistByIdHandler,  } = require('../handlers/p
 
 
 
-playlistsRouter.get("/", getPlaylistsHandler); // Utiliza directamente la función getPlaylists
+playlistsRouter.get("/", getPlaylistsHandler); 
 playlistsRouter.get("/:id", getPlaylistByIdHandler)
 
 module.exports = playlistsRouter;
