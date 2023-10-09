@@ -8,19 +8,31 @@ const { filterVideosByTags, searchVideosByKeyword } = require('../controllers/se
 const getVideosHandler = async (req, res) => {
   try {
     const keyword = req.query.keyword;
-    const channelId = 'UCDgXHpJkAlDB5sRz6NrEofw'; 
+    const channelId = 'UCDgXHpJkAlDB5sRz6NrEofw';
+    const maxResults = 10; // Número de resultados por página, ajusta según necesites
+    const pageToken = req.query.pageToken || ''; // Puede recibir el token de página desde la solicitud
 
-    const videos = await searchVideosByKeyword(keyword, channelId);
+    const { videos, nextPageToken, totalResults } = await searchVideosByKeyword(
+      keyword,
+      channelId,
+      maxResults,
+      pageToken
+    );
 
     const targetTags = req.query.tags ? req.query.tags.split(',') : [];
     const filteredVideos = filterVideosByTags(videos, targetTags, channelId);
 
-    res.status(200).json(filteredVideos);
+    res.status(200).json({
+      videos: filteredVideos,
+      nextPageToken: nextPageToken,
+      totalResults: totalResults,
+    });
   } catch (error) {
     console.error('Error al obtener los videos:', error);
     res.status(500).json({ error: 'Error al obtener los videos' });
   }
 };
+
 
 const getVideoById = async (videoId, channelId) => {
   try {
