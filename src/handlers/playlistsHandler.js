@@ -56,6 +56,30 @@ const getPlaylistByIdHandler = async (req, res) => {
   }
 };
 
-module.exports = { getPlaylistsHandler, getPlaylistByIdHandler };
+const getPlaylistItemsHandler = async (req, res) => {
+  const playlistId = req.params.id;
+  try {
+    const response = await axios.get('https://www.googleapis.com/youtube/v3/playlistItems', {
+      params: {
+        part: 'snippet,contentDetails',
+        playlistId: playlistId,
+        key: API_KEY,
+      },
+    });
+
+    const playlistItemsData = response.data.items;
+
+    if (playlistItemsData.length === 0) {
+      res.status(404).json({ error: 'No se encontró ningún video en esa lista de reproducción.' });
+    } else {
+      res.status(200).json(playlistItemsData);
+    }
+  } catch (error) {
+    console.error('Error al obtener los videos de la lista de reproducción:', error);
+    res.status(500).json({ error: 'Error al obtener los videos de la lista de reproducción' });
+  }
+};
+
+module.exports = { getPlaylistsHandler, getPlaylistByIdHandler, getPlaylistItemsHandler };
 
 
