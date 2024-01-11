@@ -58,21 +58,38 @@ const getPlaylistByIdHandler = async (req, res) => {
 
 const getPlaylistItemsHandler = async (req, res) => {
   const playlistId = req.params.id;
+  const maxResults = 50; // El máximo permitido por la API de YouTube
+  
   try {
-    const response = await axios.get('https://www.googleapis.com/youtube/v3/playlistItems', {
-      params: {
-        part: 'snippet,contentDetails',
-        playlistId: playlistId,
-        key: API_KEY,
-      },
-    });
+    let nextPageToken = null;
+    let allPlaylistItems = [];
 
-    const playlistItemsData = response.data.items;
+    do {
+      const response = await axios.get('https://www.googleapis.com/youtube/v3/playlistItems', {
+        params: {
+          part: 'snippet,contentDetails',
+          playlistId: playlistId,
+          maxResults: maxResults,
+          key: API_KEY,
+          pageToken: nextPageToken,
+        },
+      });
 
-    if (playlistItemsData.length === 0) {
+      const playlistItemsData = response.data.items;
+
+      if (playlistItemsData.length > 0) {
+        allPlaylistItems = allPlaylistItems.concat(playlistItemsData);
+        nextPageToken = response.data.nextPageToken;
+      } else {
+        nextPageToken = null;
+      }
+
+    } while (nextPageToken);
+
+    if (allPlaylistItems.length === 0) {
       res.status(404).json({ error: 'No se encontró ningún video en esa lista de reproducción.' });
     } else {
-      res.status(200).json(playlistItemsData);
+      res.status(200).json(allPlaylistItems);
     }
   } catch (error) {
     console.error('Error al obtener los videos de la lista de reproducción:', error);
@@ -81,5 +98,8 @@ const getPlaylistItemsHandler = async (req, res) => {
 };
 
 module.exports = { getPlaylistsHandler, getPlaylistByIdHandler, getPlaylistItemsHandler };
+
+
+git 
 
 
